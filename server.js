@@ -6,7 +6,7 @@ app.use(express.json())
 const ZALO_BOT_TOKEN = process.env.ZALO_BOT_TOKEN || "1394369929164293156:zsgnmNfnTFKhJlwhFhzfbBennzfcfXMYwPCHOISzsIrYVkHyuvuiDKgQvgsOHpIk"
 const LLM_API_URL = process.env.LLM_API_URL || "https://openrouter.ai/api/v1/chat/completions"
 const LLM_API_KEY = process.env.LLM_API_KEY || "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"
-const MODEL = process.env.MODEL || "openai/gpt-4o-mini"
+const MODEL = process.env.MODEL || "google/gemma-2-9b-it:free"
 
 let lastEvent = null
 const tasks = [] // { id, userId, message, remindTime, sent }
