@@ -56,7 +56,8 @@ async function callLLM(messages) {
 }
 
 function parseTimeFromMessage(msg) {
-  const now = new Date()
+  // Vietnam is GMT+7
+  const now = new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
   let remindTime = null
   
   // Parse patterns like "15:30", "14:00", "9:00"
@@ -152,7 +153,7 @@ function extractTask(msg) {
 
 // Check reminders every minute
 setInterval(async () => {
-  const now = new Date()
+  const now = new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
   
   for (const task of tasks) {
     if (!task.sent && task.remindTime <= now) {
