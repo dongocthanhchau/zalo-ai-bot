@@ -3,9 +3,9 @@ const express = require("express")
 const app = express()
 app.use(express.json())
 
-const ZALO_BOT_TOKEN = process.env.ZALO_BOT_TOKEN || "1394369929164293156:zsgnmNfnTFKhJlwhFhzfbBennzfcfXMYwPCHOISzsIrYVkHyuvuiDKgQvgsOHpIk"
+const ZALO_BOT_TOKEN = process.env.ZALO_BOT_TOKEN
 const LLM_API_URL = process.env.LLM_API_URL || "https://openrouter.ai/api/v1/chat/completions"
-const LLM_API_KEY = process.env.LLM_API_KEY || "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"
+const LLM_API_KEY = process.env.LLM_API_KEY
 const MODEL = process.env.MODEL || "google/gemma-2-9b-it:free"
 
 let lastEvent = null
@@ -14,6 +14,11 @@ const tasks = [] // { id, userId, message, remindTime, sent }
 console.log("=== Zalo AI Bot Started ===")
 console.log("ZALO_BOT_TOKEN:", ZALO_BOT_TOKEN ? "set" : "NOT SET")
 console.log("LLM_API_KEY:", LLM_API_KEY ? "set" : "NOT SET")
+
+if (!ZALO_BOT_TOKEN || !LLM_API_KEY) {
+  console.error("ERROR: Missing required env vars! Please set ZALO_BOT_TOKEN and LLM_API_KEY")
+  process.exit(1)
+}
 
 async function zaloAPI(endpoint, body) {
   const url = `https://bot-api.zaloplatforms.com/bot${ZALO_BOT_TOKEN}/${endpoint}`
