@@ -10,6 +10,7 @@ const MODEL = process.env.MODEL || "google/gemma-2-9b-it:free"
 
 let lastEvent = null
 const tasks = [] // { id, userId, message, remindTime, sent }
+const messageLog = [] // { timestamp, userId, userName, message, eventName }
 
 console.log("=== Zalo AI Bot Started ===")
 console.log("ZALO_BOT_TOKEN:", ZALO_BOT_TOKEN ? "set" : "NOT SET")
@@ -186,6 +187,24 @@ app.post("/webhook", async (req, res) => {
   lastEvent = req.body
   const event = req.body
 
+  // Log all messages
+  const userId = event.message?.from?.id || event.result?.message?.from?.id
+  const userName = event.message?.from?.display_name || event.result?.message?.from?.display_name || "Unknown"
+  const userMessage = event.message?.text || event.result?.message?.text || event.message?.message_type || ""
+  
+  messageLog.push({
+    timestamp: new Date().toISOString(),
+    userId,
+    userName,
+    message: userMessage,
+    eventName: event.event_name
+  })
+  
+  // Keep last 100 messages
+  while (messageLog.length > 100) {
+    messageLog.shift()
+  }
+
   let responseMsg = "Đã nhận tin nhắn! "
 
   if (event.event_name === "message.text.received") {
@@ -270,6 +289,10 @@ app.get("/debug", (req, res) => {
     tasks: tasks.map(t => ({ id: t.id, message: t.message, remindTime: t.remindTime, sent: t.sent })),
     message: lastEvent ? "Đã có tin nhắn!" : "Chưa có tin nhắn nào"
   })
+})
+
+app.get("/messages", (req, res) => {
+  res.json({ messages: messageLog })
 })
 
 app.get("/tasks", (req, res) => {
