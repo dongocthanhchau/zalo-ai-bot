@@ -75,7 +75,7 @@ function parseTimeFromMessage(msg) {
   }
   
   // Parse patterns like "30 phút", "1 tiếng", "2h"
-  const minutesMatch = msg.match(/(\d+)\s*(phút|phút|p|tien|t/i)
+  const minutesMatch = msg.match(/(\d+)\s*(phut|phút|p|tien|t|tiếng|gio)/i)
   if (minutesMatch) {
     const mins = parseInt(minutesMatch[1])
     remindTime = new Date(now.getTime() + mins * 60000)
