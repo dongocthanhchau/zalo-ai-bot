@@ -59,8 +59,8 @@ app.post("/webhook", async (req, res) => {
   let responseMsg = "Đã nhận tin nhắn! "
 
   if (event.event_name === "message.text.received") {
-    const userId = event.result?.message?.from?.id
-    const userMessage = event.result?.message?.text
+    const userId = event.message?.from?.id || event.result?.message?.from?.id
+    const userMessage = event.message?.text || event.result?.message?.text
     
     console.log(`User: ${userId}, Message: ${userMessage}`)
     
